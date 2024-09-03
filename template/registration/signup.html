@@ -1,0 +1,23 @@
+{% extends "blog/base.html" %}
+{% block title %} Sign Up {% endblock %}
+{% block content %}
+    <h2> Sign Up </h2>
+    {% if form.errors %}
+        <div style="display: table; margin: 0 auto; text-align: left;">
+            {% for key, value in form.errors.items %}
+                <strong>{{ value }}</strong>
+            {% endfor %}
+        </div>
+    {% endif %}
+    <form method="post">
+        {% csrf_token %}
+        <p>Username: {{ form.username }}</p>
+        <p>Email: {{ form.email }}</p>
+        <p>First Name: {{ form.first_name }}</p>
+        <p>Last Name: {{ form.last_name }}</p>
+        <p>Password: {{ form.password1 }}</p>
+        <p>Confirm Password: {{ form.password2 }}</p>
+        <button type="submit">Sign Up</button>
+    </form>
+    <a href="{% url 'login' %}">Have an account? Go to Log In</a>
+{% endblock %}

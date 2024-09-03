@@ -2,5 +2,6 @@ asgiref==3.8.1
 Django==5.1
 django-taggit==6.0.0
 Markdown==3.7
+psycopg2-binary==2.9.9
 sqlparse==0.5.1
 typing_extensions==4.12.2
