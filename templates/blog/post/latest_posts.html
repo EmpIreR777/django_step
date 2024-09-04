@@ -1,0 +1,3 @@
+{% for post in latest_posts %}
+            <a class="list-group-item list-group-item-action" href="{{ post.get_absolute_url }}">{{ post.title }}</a>
+    {% endfor %}

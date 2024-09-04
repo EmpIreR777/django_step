@@ -1,0 +1,16 @@
+{% extends "blog/base.html" %}
+{% block title %} Login {% endblock %}
+{% block content %}
+    <h2> Login </h2>
+    <a href="{% url 'signup' %}"  class="btn btn-link btn-lg active btn-block">SignUp</a>
+    <a href="{% url 'social:begin' 'github' %}"  class="btn btn-link btn-lg active btn-block">Log In with GitHub</a>
+    <a href="{% url 'social:begin' 'google-oauth2' %}" class="btn btn-link btn-lg active btn-block">Log In with Google</a>
+    <form method="post" class="form">
+        {{ form.username }}
+        {{ form.password }}
+        <div class="mb-1">Remember me: {{ form.remember_me }}</div>
+        {% csrf_token %}
+        <input type="submit" class="btn btn-primary btn-lg" value="Login">
+    </form>
+   <a href="{% url 'password_reset' %}">Reset Password</a>
+{% endblock %}

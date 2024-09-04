@@ -10,6 +10,7 @@
         {% with results.count as total_results %}
             Found {{ total_results }} result{{ total_results|pluralize }} {% endwith %}
     </h3>
+    <hr class="mt-1 mb-1"/>
     {% for post in results %}
         <h4>
             <a href="{{ post.get_absolute_url }}"> {{ post.title }}
@@ -23,7 +24,7 @@
         Search for posts
     </h1>
     <form method="get">
-        {{ form.as_p }}
-        <input type="submit" value="Search">
+        {{ form.query }}
+        <input type="submit" value="Search" class="btn btn-primary mb-3 btn-lg">
     </form>
 {% endif %} {% endblock %}

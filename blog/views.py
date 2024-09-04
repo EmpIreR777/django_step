@@ -1,3 +1,4 @@
+from django.conf import settings
 from django.shortcuts import render, get_object_or_404, redirect
 from django.core.paginator import Paginator, EmptyPage, PageNotAnInteger
 from django.views.generic import ListView
@@ -36,14 +37,10 @@ def post_search(request):
 def post_comment(request, post_id):
     post = get_object_or_404(Post, id=post_id, status=Post.Status.PUBLISHED)
     comment = None
-    # Комментарий был отправлен
     form = CommentForm(data=request.POST)
     if form.is_valid():
-        # Создать объект класса Comment, не сохраняя его в базе данных
         comment = form.save(commit=False)
-        # Назначить пост комментарию
         comment.post = post
-        # Сохранить комментарий в базе данных
         comment.save()
     return render(request, 'blog/post/comment.html', {'post': post, 'form': form, 'comment': comment})
 
@@ -84,13 +81,8 @@ def post_detail(request, year, month, day, post):
         Post, status=Post.Status.PUBLISHED, slug=post, publish__year=year, publish__month=month, publish__day=day
     )
 
-    # Список активных комментариев к этому посту
     comments = post.comments.filter(active=True)
-
-    # Форма для комментариев пользователей
     form = CommentForm()
-
-    # Список схожих постов
     post_tags_ids = post.tags.values_list('id', flat=True)
     similar_posts = Post.published.filter(tags__in=post_tags_ids).exclude(id=post.id)
     similar_posts = similar_posts.annotate(same_tags=Count('tags')).order_by('-same_tags', '-publish')[:4]
@@ -102,15 +94,12 @@ def post_detail(request, year, month, day, post):
 
 
 def post_share(request, post_id):
-    # Извлечь пост по его идентификатору id
     post = get_object_or_404(Post, id=post_id, status=Post.Status.PUBLISHED)
     sent = False
 
     if request.method == 'POST':
-        # Форма была передана на обработку
         form = EmailPostForm(request.POST)
         if form.is_valid():
-            # Поля формы успешно прошли валидацию
             cd = form.cleaned_data
             post_url = request.build_absolute_uri(post.get_absolute_url())
             subject = f"{cd['name']} recommends you read " f"{post.title}"

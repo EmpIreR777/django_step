@@ -1,0 +1,51 @@
+{% extends "blog/base.html" %}
+{% load blog_tags %}
+
+{% block title %}{{ post.title }}{% endblock %}
+
+{% block content %}
+    <h1 class="fw-bolder">{{ post.title }}</h1>
+    <p class="text-muted fst-italic mb-2 text-end">
+        Published {{ post.publish }} by {{ post.author }}
+    </p>
+    {{ post.body|markdown }}
+    <div class="d-flex justify-content-end">
+        <a class="btn btn-primary float-left" href="{% url 'blog:post_share' post.id %}">
+            Share this post
+        </a>
+    </div>
+    {% if similar_posts %}
+        <div class="row card mt-2">
+            <h2>Similar posts</h2>
+            {% for post in similar_posts %}
+                <p>
+                    <a href="{{ post.get_absolute_url }}">{{ post.title }}</a>
+                </p>
+            {% endfor %}
+        </div>
+    {% endif %}
+    <div class="row card mt-2">
+        {% with comments.count as total_comments %}
+            <h2>
+                {{ total_comments }} comment{{ total_comments|pluralize }}
+            </h2>
+            <hr class="mt-1 mb-1"/>
+        {% endwith %}
+        {% for comment in comments %}
+
+            <div class="comment">
+                <p class="text-muted fst-italic mb-2">
+                    Comment {{ forloop.counter }} by {{ comment.name }}
+                    {{ comment.created }}
+                </p>
+                {{ comment.body|safe }}
+
+            </div>
+            <hr class="mt-1 mb-1"/>
+        {% empty %}
+            <p>There are no comments.</p>
+        {% endfor %}
+
+        {% include "blog/post/includes/comment_form.html" %}
+    </div>
+{% endblock %}

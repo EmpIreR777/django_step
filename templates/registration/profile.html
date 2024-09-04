@@ -1,0 +1,44 @@
+{% extends "blog/base.html" %}
+{% block title %}Profile Page{% endblock title %}
+{% block content %}
+    <div>
+        <img src="{{ user.profile.avatar.url }}"/>
+    </div>
+    {% if user_form.errors %}
+        <div class="container d-flex align-items-center justify-content-center">
+            <div class="alert alert-warning alert-dismissible fade show w-50  d-block" role="alert">
+                {% for key, value in user_form.errors.items %}
+                    <strong>{{ value }}</strong>
+                {% endfor %}
+                <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
+            </div>
+        </div>
+    {% endif %}
+    <div class="form-content">
+        <form method="post" enctype="multipart/form-data">
+            {% csrf_token %}
+            <div>
+                <div>
+                    <div>
+                        <label>Username:</label>
+                        {{ user_form.username }}
+                        <hr>
+                        <label>Email:</label>
+                        {{ user_form.email }}
+                    </div>
+                    <hr>
+                    <div><a href="{% url 'password_change' %}">Change Password</a>
+
+                        <hr>
+                        <label>Change Avatar:</label>
+                        {{ profile_form.avatar }}
+                    </div>
+                    <hr>
+                    <label>Bio:</label> {{ profile_form.bio }}
+                </div>
+            </div>
+            <button type="submit" class="btn btn-primary btn-lg">Save Changes</button>
+            <button type="reset" class="btn btn-primary btn-lg">Reset</button>
+        </form>
+    </div>
+{% endblock content %}
